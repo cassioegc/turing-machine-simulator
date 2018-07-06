@@ -19,6 +19,9 @@ class Machine():
     def current(self):
         return self.__current
 
+    @current.setter
+    def current(self, value):
+        self.__current = value
     @property
     def rejection(self):
         return self.__rejection
@@ -34,6 +37,10 @@ class Machine():
     @property
     def steps(self):
         return self.__steps
+    
+    @steps.setter
+    def steps(self, value):
+        self.__steps = value
 
     def add_status(self, name, read, write, direction, next):
         if name not in self.status.keys():
@@ -44,11 +51,8 @@ class Machine():
     def add_word(self, word):
         self.tape.add_word(word)
 
-    def add_steps(self):
-        self.__steps += 1
-
     def edit_current(self, current):
-        self.__current = current
+        self.current = current
 
     def analyze(self):
         while self.current not in self.acceptance and self.current not in self.rejection:
@@ -59,8 +63,8 @@ class Machine():
                 aux = self.status[self.current].get_transition(self.tape.get_symbol())
 
             self.tape.edit(aux[:2])
-            self.add_steps()
-            self.edit_current(aux[2])
+            self.steps += 1
+            self.current = aux[2]
 
     def get_tape(self):
         return self.tape.__str__()
